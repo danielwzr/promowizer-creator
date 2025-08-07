@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Promoção para WhatsApp</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 20px;
+      padding: 0;
+      background-color: #f4f4f4;
+    }
+
+    h1 {
+      text-align: center;
+      color: #333;
+    }
+
+    form {
+      background: white;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 0 10px #ccc;
+      max-width: 500px;
+      margin: auto;
+    }
+
+    label {
+      display: block;
+      margin-top: 15px;
+      font-weight: bold;
+    }
+
+    input, textarea {
+      width: 100%;
+      padding: 10px;
+      margin-top: 5px;
+      border-radius: 5px;
+      border: 1px solid #ccc;
+      box-sizing: border-box;
+    }
+
+    button {
+      margin-top: 20px;
+      width: 100%;
+      padding: 12px;
+      background-color: #4CAF50;
+      color: white;
+      border: none;
+      font-size: 16px;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background-color: #45a049;
+    }
+
+    #output {
+      white-space: pre-wrap;
+      margin-top: 20px;
+      background: #e0ffe0;
+      padding: 15px;
+      border-radius: 8px;
+      border: 1px dashed #4CAF50;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Gerador de Promoções 📣</h1>
+  <form id="promoForm">
+    <label for="nome">Nome do Produto</label>
+    <input type="text" id="nome" required>
+
+    <label for="valorAntigo">Valor Anterior (R$)</label>
+    <input type="text" id="valorAntigo" required>
+
+    <label for="valorNovo">Valor na Promoção (R$)</label>
+    <input type="text" id="valorNovo" required>
+
+    <label for="descricao">Descrição (opcional)</label>
+    <textarea id="descricao"></textarea>
+
+    <label for="cupom">Cupom (opcional)</label>
+    <input type="text" id="cupom">
+
+    <label for="link">Link do Produto</label>
+    <input type="url" id="link" required>
+
+    <button type="button" onclick="gerarTexto()">Gerar Texto para WhatsApp</button>
+  </form>
+
+  <div id="output"></div>
+
+  <script>
+    function gerarTexto() {
+      const nome = document.getElementById('nome').value.trim();
+      const valorAntigo = document.getElementById('valorAntigo').value.trim();
+      const valorNovo = document.getElementById('valorNovo').value.trim();
+      const descricao = document.getElementById('descricao').value.trim();
+      const cupom = document.getElementById('cupom').value.trim();
+      const link = document.getElementById('link').value.trim();
+
+      let mensagem = "🔥 Promoção Imperdível! 🔥\n\n";
+      mensagem += `📦 Nome: ${nome}\n`;
+      mensagem += `💰 De: ~R$ ${valorAntigo}~\n`;
+      mensagem += `➡️ Por: R$ ${valorNovo}\n`;
+      mensagem += `🔗 Link: ${link}\n`;
+
+      if (descricao) {
+        mensagem += `\n📝 Descrição: ${descricao}`;
+      }
+
+      if (cupom) {
+        mensagem += `\n🎁 Cupom: ${cupom}`;
+      }
+
+      document.getElementById('output').innerText = mensagem;
+    }
+  </script>
+
+</body>
+</html>
