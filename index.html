@@ -64,20 +64,41 @@
       padding: 15px;
       border-radius: 8px;
       border: 1px dashed #4CAF50;
+      position: relative;
+    }
+
+    .copy-btn {
+      display: flex;
+      justify-content: center;
+      margin-top: 15px;
+    }
+
+    .copy-icon {
+      font-size: 40px;
+      cursor: pointer;
+      user-select: none;
+    }
+
+    .copied-msg {
+      text-align: center;
+      color: green;
+      font-weight: bold;
+      margin-top: 10px;
+      display: none;
     }
   </style>
 </head>
 <body>
 
-  <h1>Gerador de Promoções 📣</h1>
+  <h1>Gerador de Divulgações 📣</h1>
   <form id="promoForm">
-    <label for="nome">Nome do Produto</label>
+    <label for="nome">Nome do Produto *</label>
     <input type="text" id="nome" required>
 
-    <label for="valorAntigo">Valor Anterior (R$)</label>
+    <label for="valorAntigo">Valor Anterior (R$) *</label>
     <input type="text" id="valorAntigo" required>
 
-    <label for="valorNovo">Valor na Promoção (R$)</label>
+    <label for="valorNovo">Valor na Promoção (R$) *</label>
     <input type="text" id="valorNovo" required>
 
     <label for="descricao">Descrição (opcional)</label>
@@ -86,16 +107,24 @@
     <label for="cupom">Cupom (opcional)</label>
     <input type="text" id="cupom">
 
-    <label for="link">Link do Produto</label>
+    <label for="link">Link do Produto *</label>
     <input type="url" id="link" required>
 
-    <button type="button" onclick="gerarTexto()">Gerar Texto para WhatsApp</button>
+    <button type="submit">Gerar Texto para WhatsApp</button>
   </form>
 
-  <div id="output"></div>
+  <div id="output-container" style="max-width: 500px; margin: 20px auto;">
+    <div class="copy-btn">
+      <span class="copy-icon" onclick="copiarTexto()">📋</span>
+    </div>
+    <div id="copiedMsg" class="copied-msg">Texto copiado!</div>
+    <div id="output"></div>
+  </div>
 
   <script>
-    function gerarTexto() {
+    document.getElementById('promoForm').addEventListener('submit', function(event) {
+      event.preventDefault();
+
       const nome = document.getElementById('nome').value.trim();
       const valorAntigo = document.getElementById('valorAntigo').value.trim();
       const valorNovo = document.getElementById('valorNovo').value.trim();
@@ -103,21 +132,34 @@
       const cupom = document.getElementById('cupom').value.trim();
       const link = document.getElementById('link').value.trim();
 
-      let mensagem = "🔥 Promoção Imperdível! 🔥\n\n";
-      mensagem += `📦 Nome: ${nome}\n`;
-      mensagem += `💰 De: ~R$ ${valorAntigo}~\n`;
-      mensagem += `➡️ Por: R$ ${valorNovo}\n`;
-      mensagem += `🔗 Link: ${link}\n`;
+      let mensagem = "";
+      mensagem += `🔥📦 *${nome}* 📦🔥\n`;
+      mensagem += `💰 De ~R$ ${valorAntigo}~\n`;
+      mensagem += `💸 Por R$ ${valorNovo}\n`;
+      mensagem += `🔗 ${link}\n`;
 
       if (descricao) {
-        mensagem += `\n📝 Descrição: ${descricao}`;
+        mensagem += `\n📝 ${descricao}`;
       }
 
       if (cupom) {
-        mensagem += `\n🎁 Cupom: ${cupom}`;
+        mensagem += `\n🎟️ Cupom: ${cupom}`;
       }
 
       document.getElementById('output').innerText = mensagem;
+      document.getElementById('copiedMsg').style.display = 'none';
+    });
+
+    function copiarTexto() {
+      const texto = document.getElementById('output').innerText;
+
+      if (!texto) return;
+
+      navigator.clipboard.writeText(texto).then(() => {
+        const msg = document.getElementById('copiedMsg');
+        msg.style.display = 'block';
+        setTimeout(() => msg.style.display = 'none', 2000);
+      });
     }
   </script>
 
