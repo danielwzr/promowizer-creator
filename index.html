@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Gerador de Promoções - WhatsApp</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+            font-family: Arial, Helvetica, sans-serif;
+        }
+
+        body {
+            background: #f2f2f2;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 480px;
+            margin: auto;
+            background: #fff;
+            padding: 20px;
+            border-radius: 8px;
+        }
+
+        input,
+        button {
+            width: 100%;
+            padding: 12px;
+            margin-bottom: 10px;
+            border: 2px solid #000;
+            border-radius: 4px;
+            font-size: 16px;
+        }
+
+        .checkbox {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+
+        .checkbox input{
+            width: 20px;
+        }
+
+        button {
+            cursor: pointer;
+            border: none;
+        }
+
+        .btn-gerar {
+            background: #000;
+            color: #fff;
+            font-weight: bold;
+        }
+
+        /* PREVIEW */
+        .preview {
+            margin-top: 20px;
+            border: 3px solid #1DA851;
+            padding: 15px;
+            border-radius: 8px;
+            display: none;
+        }
+
+        .preview img {
+            width: 100%;
+            border: 3px solid #000;
+            border-radius: 6px;
+            margin-bottom: 15px;
+        }
+
+        .preview p {
+            margin: 6px 0;
+            font-size: 16px;
+        }
+
+        .actions {
+            display: flex;
+            gap: 10px;
+            margin-top: 15px;
+        }
+
+        .copy {
+            background: #ff7a18;
+            color: #fff;
+            font-weight: bold;
+        }
+
+        .wpp {
+            background: #25D366;
+            color: #fff;
+            font-weight: bold;
+        }
+
+        @media (max-width: 480px) {
+            .actions {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <form class="container">
+
+        <input id="nome" placeholder="Nome" required>
+        <input id="preco" placeholder="Preço" required>
+        <input id="cupom" placeholder="Cupom">
+        <input id="link" placeholder="Link" required>
+
+        <div class="checkbox">
+            <input type="checkbox" id="parcelado">
+            <label for="parcelado">12x sem juros</label>
+        </div>
+
+        <button class="btn-gerar" onclick="gerar()">GERAR</button>
+
+        <div class="preview" id="preview">
+            <img src="https://via.placeholder.com/600x300?text=IMAGEM+PADR%C3%83O" alt="Imagem da promoção">
+
+            <p id="pNome"></p>
+            <p id="pPreco"></p>
+            <p id="pCupom"></p>
+            <p id="pParcelado"></p>
+            <p id="pLink"></p>
+
+            <div class="actions">
+                <button class="copy" onclick="copiarTexto()">COPIAR TEXTO</button>
+                <button class="wpp" onclick="enviarWhatsapp()">ENVIAR DIRETO NO WPP</button>
+            </div>
+        </div>
+
+    </form>
+
+    <script>
+        let textoFinal = "";
+
+        const form = document.querySelector(".container")
+        form.addEventListener('submit', e => {
+            e.preventDefault()
+        })
+
+        function gerar() {
+            const nome = document.getElementById("nome").value;
+            const preco = document.getElementById("preco").value;
+            const cupom = document.getElementById("cupom").value;
+            const link = document.getElementById("link").value;
+            const parcelado = document.getElementById("parcelado").checked;
+
+            if (!nome || !preco || !link) {
+                return
+            }
+
+            document.getElementById("pNome").innerText = `🔥 ${nome}`;
+            document.getElementById("pPreco").innerText = `💸 ${preco}`;
+            document.getElementById("pCupom").innerText = cupom ? `🎟️ Cupom: ${cupom}` : "";
+            document.getElementById("pParcelado").innerText = parcelado ? `💳 12x sem juros` : "";
+            document.getElementById("pLink").innerText = `🔗 ${link}`;
+
+            textoFinal =
+                `🔥 ${nome}\n💸 ${preco}
+\n${cupom ? "🎟️ Cupom: " + cupom : ""}
+${parcelado ? "💳 12x sem juros" : ""}
+\n🔗 ${link}`;
+
+
+            document.getElementById("preview").style.display = "block";
+
+
+        }
+
+        function copiarTexto() {
+            navigator.clipboard.writeText(textoFinal);
+            alert("Texto copiado com sucesso!");
+        }
+
+        function enviarWhatsapp() {
+            const textoEncoded = encodeURIComponent(textoFinal);
+            const url = `https://wa.me/?text=${textoEncoded}`;
+            window.open(url, "_blank");
+        }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        function validaImagem(conteudo) {
+            let mediaPath = "";
+
+            if (conteudo.toLowerCase().includes("cupom") || conteudo.toLowerCase().includes("cupons")) {
+                if (conteudo.toLowerCase().includes("shopee")) {
+                    mediaPath = "./imagens/shopee.png";
+                }
+                if (conteudo.toLowerCase().includes("mercado livre") || conteudo.toLowerCase().includes("mercadolivre" || conteudo.toLowerCase().includes("ml"))) {
+                    mediaPath = "./imagens/ml.png";
+                }
+            }
+
+            if (nomeProduto.toLowerCase().includes("filamento") || nomeProduto.toLowerCase().includes("pla") || nomeProduto.toLowerCase().includes("petg")) {
+                mediaPath = "./imagens/filamento.png";
+                if (nomeProduto.toLowerCase().includes("duo")) {
+                    mediaPath = "./imagens/filamentoduo.png"
+                }
+            }
+
+            // Determinar imagem baseada no produto (mesma lógica que você já tinha)
+            if (nomeProduto.includes("a1")) {
+                mediaPath = "./imagens/a1.png";
+                if (nomeProduto.includes("ams") && !nomeProduto.includes("sem")) {
+                    mediaPath = "./imagens/a1ams.png";
+                }
+            }
+            if (nomeProduto.includes("a1 mini")) {
+                mediaPath = "./imagens/a1mini.png";
+                if (nomeProduto.includes("ams") && !nomeProduto.includes("sem")) {
+                    mediaPath = "./imagens/a1miniams.png";
+                }
+            }
+            if (nomeProduto.includes("cold plate") || nomeProduto.includes("cold")) {
+                if (nomeProduto.includes("glacier")) {
+                    mediaPath = "./imagens/coldplate.png";
+                }
+            }
+
+            if (nomeProduto.includes("masterprint") || marcaProduto.includes("masterprint") || nomeProduto.includes("master print") || marcaProduto.includes("master print")) {
+                mediaPath = "./imagens/masterprint.png";
+            }
+            if (nomeProduto.includes("kobra") && nomeProduto.includes("3")) {
+                mediaPath = "./imagens/kobra3v2.png";
+            }
+            if (nomeProduto.includes("hi")) {
+                mediaPath = "./imagens/hi.png";
+                if (nomeProduto.includes("combo")) {
+                    mediaPath = "./imagens/hicombo.png";
+                }
+            }
+            if (nomeProduto.includes("voolt3d") || nomeProduto.includes("voolt") || nomeProduto.includes("voolt 3d") || marcaProduto.includes("voolt3d") || marcaProduto.includes("voolt") || marcaProduto.includes("voolt 3d") || marcaProduto.includes("volt3d") || marcaProduto.includes("volt")) {
+                mediaPath = "./imagens/voolt3d.png";
+                if (nomeProduto.includes("outlet") || marcaProduto.includes("outlet")) {
+                    mediaPath = "./imagens/voolt3doutlet.png";
+                }
+            }
+            if (nomeProduto.includes("creality") && (nomeProduto.includes("filamento") || nomeProduto.includes("petg") || nomeProduto.includes("pla"))) {
+                mediaPath = "./imagens/creality.png"
+            }
+            return mediaPath
+        }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    </script>
+
+
+
+</body>
+
+</html>
